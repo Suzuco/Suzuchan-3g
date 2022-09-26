@@ -32,3 +32,6 @@
 *.app
 cmake-build-*
 .idea
+
+__pycache__
+jubeat_cache.pickle
