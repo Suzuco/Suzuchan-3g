@@ -33,5 +33,9 @@
 cmake-build-*
 .idea
 
+# Python cache
 __pycache__
 jubeat_cache.pickle
+
+# Obsolete files
+*.bak
