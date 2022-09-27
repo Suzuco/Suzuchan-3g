@@ -20,54 +20,30 @@ void Suzuchan::process(GroupMessageEvent e)
     std::string msg = e.message.toMiraiCode();
 
     Logger::logger.info(msg);
-    if (boost::starts_with(msg, "rsel ") || boost::starts_with(msg, "resl ")) {
-        randsel(e);
-        return;
-    }
-    if (boost::starts_with(msg, "gojb")) {
-        go_jubeat(e);
-        return;
-    }
-    if (boost::starts_with(msg, "rcat ")) {
+    if (boost::starts_with(msg, "rcat "))
         randcat(e);
-        return;
-    }
-    for (const std::string & kw : { "roll", ".rd", ".roll", "/roll" }) {
-        if (boost::starts_with(msg, kw)) {
-            diceroll(e);
-            return;
-        }
-    }
-    if (boost::starts_with(msg, "yb50")) {
-        yb50(e);
-        return;
-    }
-    for (const std::string & kw : { "递烟", "啵啵" }) {
-        if (boost::starts_with(msg, kw)) {
-            smoke(e, kw.substr(3));
-            return;
-        }
-    }
-    if (msg == "抽卡")
-    {
+    else if (boost::starts_with(msg, "rsel ") || boost::starts_with(msg, "resl "))
+        randsel(e);
+    else if (boost::starts_with(msg, "gojb"))
+        go_jubeat(e);
+    else if (msg == "抽卡")
         gacha(e, false);
-    }
-    if (msg == "抽烟")
-    {
+    else if (msg == "抽烟")
         gacha(e, true);
-    }
-    if (boost::starts_with(msg, "shfl ")) {
+    else if (boost::starts_with(msg, "递烟"))
+        smoke(e, "烟");
+    else if (boost::starts_with(msg, "啵啵"))
+        smoke(e, "啵");
+    else if (boost::starts_with(msg, "roll"))
+        diceroll(e);
+    else if (boost::starts_with(msg, "yb50"))
+        yb50(e);
+    else if (boost::starts_with(msg, "shfl "))
         shuffle(e);
-        return;
-    }
-    if (boost::starts_with(msg, "scat ")) {
+    else if (boost::starts_with(msg, "scat "))
         shuffle(e, true);
-        return;
-    }
-    if (boost::starts_with(msg, "eval ")) {
+    else if (boost::starts_with(msg, "eval "))
         evaluate(e);
-        return;
-    }
 }
 
 void Suzuchan::fortune(GroupMessageEvent e)
