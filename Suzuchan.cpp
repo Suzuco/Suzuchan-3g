@@ -82,6 +82,8 @@ static PyObject * mod_gojb_string, * mod_gojb, * mod_gojb_dict, * go;
 static PyObject * mod_rcat_string, * mod_rcat, * mod_rcat_dict, * rcat;
 void Suzuchan::_initialize_pyenv()
 {
+    if (pyenv_ok)
+        return;
     auto libpython = dlopen("libpython3.10.so", RTLD_LAZY | RTLD_GLOBAL);
     if (!libpython) {
         std::cerr << "Failed to load libpython3.10.so." << std::endl;
@@ -107,8 +109,7 @@ void Suzuchan::_initialize_pyenv()
 
 void Suzuchan::randcat(GroupMessageEvent e)
 {
-    if (!pyenv_ok)
-        _initialize_pyenv();
+    _initialize_pyenv();
     auto msg = person_swap(e.message.toMiraiCode().substr(5), e);
     PyObject * rcat_string = PyUnicode_FromString(msg.c_str());
 
@@ -147,8 +148,7 @@ void Suzuchan::shuffle(GroupMessageEvent e, bool concatenate)
 
 void Suzuchan::go_jubeat(GroupMessageEvent e)
 {
-    if (!pyenv_ok)
-        _initialize_pyenv();
+    _initialize_pyenv();
     PyObject * go_args = PyUnicode_FromString(e.message.toMiraiCode().c_str());
     PyObject * args = PyTuple_New(1);
     PyTuple_SetItem(args, 0, go_args);
