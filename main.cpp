@@ -11,7 +11,7 @@ class Main : public CPPPlugin {
 public:
     // 配置插件信息
     Main() : CPPPlugin(PluginConfig(
-            "Suzuchan-3g", "Suzuchan 3G", "1.5.0", "Suzuco Kitsuneko",
+            "Suzuchan-3g", "Suzuchan 3G", "1.6.0", "Suzuco Kitsuneko",
             "Suzuchan, the 3rd generation", __DATE__  __TIME__))
     {}
 

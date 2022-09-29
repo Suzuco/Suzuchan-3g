@@ -20,7 +20,9 @@ void Suzuchan::process(GroupMessageEvent e)
     std::string msg = e.message.toMiraiCode();
 
     Logger::logger.info(msg);
-    if (boost::starts_with(msg, "rcat "))
+    if (boost::starts_with(msg, "mb40"))
+        maib40(e);
+    else if (boost::starts_with(msg, "rcat "))
         randcat(e);
     else if (boost::starts_with(msg, "rsel ") || boost::starts_with(msg, "resl "))
         randsel(e);
@@ -80,6 +82,7 @@ bool pyenv_ok;
 static PyObject * sys, * path;
 static PyObject * mod_gojb_string, * mod_gojb, * mod_gojb_dict, * go;
 static PyObject * mod_rcat_string, * mod_rcat, * mod_rcat_dict, * rcat;
+static PyObject * mod_maib40_string, * mod_maib40, * mod_maib40_dict, * maib40_gen;
 void Suzuchan::_initialize_pyenv()
 {
     if (pyenv_ok)
@@ -103,6 +106,11 @@ void Suzuchan::_initialize_pyenv()
     mod_rcat = PyImport_Import(mod_rcat_string);
     mod_rcat_dict = PyModule_GetDict(mod_rcat);
     rcat = PyDict_GetItemString(mod_rcat_dict, "rcat");
+
+    mod_maib40_string = PyUnicode_FromString((char *)"maib40");
+    mod_maib40 = PyImport_Import(mod_maib40_string);
+    mod_maib40_dict = PyModule_GetDict(mod_maib40);
+    maib40_gen = PyDict_GetItemString(mod_maib40_dict, "maib40");
 
     pyenv_ok = true;
 }
@@ -347,6 +355,29 @@ void Suzuchan::yb50(GroupMessageEvent e) {
     system("python3 ./maimai-profile-parser/app.py png");
     Image i = e.group.uploadImg("miaomiaodx_ratings_ahiru233_0.png");
     e.group.sendMessage(i);
+}
+
+void Suzuchan::maib40(GroupMessageEvent e)
+{
+    _initialize_pyenv();
+    PyObject * mb40_args = PyUnicode_FromString(std::to_string(e.sender.id()).c_str());
+    PyObject * args = PyTuple_New(1);
+    PyTuple_SetItem(args, 0, mb40_args);
+    PyObject * result = PyObject_CallObject(maib40_gen, args);
+    Py_ssize_t size;
+    const char * data = PyUnicode_AsUTF8AndSize(result, &size);
+    std::string response(data, size);
+
+    if (boost::starts_with(response, "/tmp/")) {
+        Image i = e.group.uploadImg(response);
+        e.group.sendMessage(i);
+    }
+    else if (response == "400") {
+        e.group.sendMessage("查无此人喵。打开https://www.diving-fish.com/maimaidx/prober/有数据导入指南喵。");
+    }
+    else if (response == "403") {
+        e.group.sendMessage("你不许查了喵.jpg");
+    }
 }
 
 template <typename T> T Suzuchan::urandom()
