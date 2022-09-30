@@ -46,6 +46,8 @@ private:
     }
 
 public:
+    static std::string VERSION;
+    static std::string COMPILE_TIME;
     static void process(MiraiCP::GroupMessageEvent e);
     static void fortune(GroupMessageEvent e);
     static void randsel(GroupMessageEvent e);
@@ -59,6 +61,7 @@ public:
     static void yb50(GroupMessageEvent e);
     static void maib40(GroupMessageEvent e);
 };
+
 
 
 #endif //MIRAICP_SUZUCHAN_H

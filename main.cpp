@@ -11,8 +11,8 @@ class Main : public CPPPlugin {
 public:
     // 配置插件信息
     Main() : CPPPlugin(PluginConfig(
-            "Suzuchan-3g", "Suzuchan 3G", "1.6.0", "Suzuco Kitsuneko",
-            "Suzuchan, the 3rd generation", __DATE__  __TIME__))
+            "Suzuchan-3g", "Suzuchan 3G", Suzuchan::VERSION, "Suzuco Kitsuneko",
+            "Suzuchan, the 3rd generation", Suzuchan::COMPILE_TIME))
     {}
 
     void onEnable() override

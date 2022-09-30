@@ -48,6 +48,9 @@ void Suzuchan::process(GroupMessageEvent e)
         evaluate(e);
 }
 
+std::string Suzuchan::VERSION = "1.6.0";
+std::string Suzuchan::COMPILE_TIME = __DATE__ ", " __TIME__;
+
 void Suzuchan::fortune(GroupMessageEvent e)
 {
 
