@@ -187,6 +187,10 @@ void Suzuchan::diceroll(GroupMessageEvent e)
         e.group.sendMessage("这不是球吗。");
         return;
     }
+    if (unlikely(param.faces == 0)) {
+        e.group.sendMessage("如果0面的骰子也是骰子，那么看过龙图的马是否仍然是马（思考考");
+        return;
+    }
     std::string result;
     std::vector<ull> dice;
     long long points = param.offset;
