@@ -175,15 +175,19 @@ void Suzuchan::diceroll(GroupMessageEvent e)
 {
     std::string msg = e.message.toMiraiCode();
     dice_param param = parse_dice(msg);
-    if (param.count <= 0) {
+    if (unlikely(param.count < 0)) {
         e.group.sendMessage("用法：roll AdX[+B]");
         return;
     }
-    if (param.count > 255) {
+    if (unlikely(param.count == 0)) {
+        e.group.sendMessage("我有一个骰子，正如你有一匹马，甚喵，其实我喵有骰子，正如...（被捂嘴");
+        return;
+    }
+    if (unlikely(param.count > 255)) {
         e.group.sendMessage("骰子批发？9.9包邮？");
         return;
     }
-    if (param.faces > 1023) {
+    if (unlikely(param.faces > 1023)) {
         e.group.sendMessage("这不是球吗。");
         return;
     }
