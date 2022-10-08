@@ -19,7 +19,7 @@ typedef unsigned long long ull;
 
 typedef struct dice_param {
     int count;
-    int faces;
+    int sides;
     int offset;
 } dice_param;
 

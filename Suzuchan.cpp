@@ -187,11 +187,11 @@ void Suzuchan::diceroll(GroupMessageEvent e)
         e.group.sendMessage("骰子批发？9.9包邮？");
         return;
     }
-    if (unlikely(param.faces > 1023)) {
+    if (unlikely(param.sides > 1023)) {
         e.group.sendMessage("这不是球吗。");
         return;
     }
-    if (unlikely(param.faces == 0)) {
+    if (unlikely(param.sides == 0)) {
         e.group.sendMessage("如果0面的骰子也是骰子，那么看过龙图的马是否仍然是马（思考考");
         return;
     }
@@ -199,11 +199,11 @@ void Suzuchan::diceroll(GroupMessageEvent e)
     std::vector<ull> dice;
     long long points = param.offset;
     for (auto i = 0; i < param.count; ++i) {
-        auto d = 1 + std::abs(urandom<int>()) % param.faces;
+        auto d = 1 + std::abs(urandom<int>()) % param.sides;
         dice.push_back(d);
         points += d;
     }
-    result += std::to_string(param.count)+"d"+std::to_string(param.faces);
+    result += std::to_string(param.count)+"d"+std::to_string(param.sides);
     if (param.offset < 0) result += std::to_string(param.offset);
     else if (param.offset > 0) result += "+" + std::to_string(param.offset);
     result += " = " + std::to_string(points) + "！";
@@ -430,16 +430,16 @@ std::string Suzuchan::person_swap(const std::string &s, const GroupMessageEvent 
 
 dice_param Suzuchan::parse_dice(const std::string & s)
 {
-    int count, faces, offset;
+    int count, sides, offset;
     auto parse = std::smatch();
     auto match = std::regex_match(s, parse, dice_notation);
     if (match) {
         count = std::stoi(parse[1].str());
-        faces = std::stoi(parse[2].str());
+        sides = std::stoi(parse[2].str());
         offset = parse[3].str().empty() ? 0 : std::stoi(parse[3].str());
     }
     else {
         count = -1;
     }
-    return { count, faces, offset };
+    return { count, sides, offset };
 }
