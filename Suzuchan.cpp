@@ -19,7 +19,6 @@ void Suzuchan::process(GroupMessageEvent e)
     Member src = e.sender;
     std::string msg = e.message.toMiraiCode();
 
-    Logger::logger.info(msg);
     if (boost::starts_with(msg, "mb40"))
         maib40(e);
     else if (boost::starts_with(msg, "rcat "))
@@ -48,7 +47,7 @@ void Suzuchan::process(GroupMessageEvent e)
         evaluate(e);
 }
 
-std::string Suzuchan::VERSION = "1.6.0";
+std::string Suzuchan::VERSION = "1.6.0-2";
 std::string Suzuchan::COMPILE_TIME = __DATE__ ", " __TIME__;
 
 void Suzuchan::fortune(GroupMessageEvent e)
