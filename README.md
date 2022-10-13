@@ -21,7 +21,7 @@ based on [Nambers/MiraiCP](https://github.com/Nambers/MiraiCP), with [ArashParto
 | eval | eval 1+1               | 基于exprtk的计算器                         ||
 | gojb | gojb lv 10 bpm 133-160 | 可以指定多种参数的jubeat随机选曲                  ||
 | mb40 | mb40                   | 拉取水鱼maimai查分器上绑定账号的成绩，然后列表           ||
-| 抽卡   | 抽卡                     | 十连抽卡模拟器（SSR 1%，SR 10%，R 89%，无保底无天井）  ||
+| 抽卡   | 抽卡                     | 十连抽卡模拟器（SSR 1%，SR 10%，R 89%，有保底无天井）  ||
 | 抽烟   | 抽烟                     | 禁言十连抽，不保证中奖.jpg                      | ✔️  |
 | 递烟   | 递烟@易烟丁真                | 一种原始的群内PVP形式（禁言->禁烟->敬烟->递烟）         | ✔️  |
 | 啵啵   | 啵啵@猫娘                  | 同`递烟` “如果感觉公共场合抽烟不太恰当，用嘴堵住别人的嘴也是可以的” | ✔️  |

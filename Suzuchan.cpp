@@ -47,7 +47,7 @@ void Suzuchan::process(GroupMessageEvent e)
         evaluate(e);
 }
 
-std::string Suzuchan::VERSION = "1.6.0-2";
+std::string Suzuchan::VERSION = "1.6.1";
 std::string Suzuchan::COMPILE_TIME = __DATE__ ", " __TIME__;
 
 void Suzuchan::fortune(GroupMessageEvent e)
@@ -234,6 +234,11 @@ ull Suzuchan::generate_gacha_qword()
             result += 4;
         if (draw < 2)
             result += 8;
+    }
+    // 保底处理
+    if ((result & 0x4444444444) == 0) {
+        auto draw = urandom<ull>() % 11;
+        result |= (draw < 1) ? 0xc000000000 : 0x4000000000;
     }
     return result;
 }
