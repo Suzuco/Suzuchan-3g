@@ -8,9 +8,8 @@ pattern = r"[\(（](.*?)[\)）]"
 
 
 def rcat(s: str):
-    match = re.search(pattern, s)
-    if match is None:
-        return s
-    return re.sub(pattern,
-                  lambda m: random.choice(m.group(1).split('/')),
-                  s)
+    result = re.sub(pattern,
+                    lambda m: random.choice(m.group(1).split('/')),
+                    s)
+    result = "".join([str(random.randint(0, 9)) if s == '#' else s for s in result])
+    return result
