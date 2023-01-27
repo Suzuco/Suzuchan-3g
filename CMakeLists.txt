@@ -52,6 +52,7 @@ add_library(suzuchan3g
         SHARED
         single_include/MiraiCP/MiraiCP.cpp # MiraiCP 源文件
         main.cpp
+        shimpy.cpp shimpy.h
         Suzuchan.cpp Suzuchan.h
         exprtk/exprtk.hpp Suzuchan-math.cpp)
 

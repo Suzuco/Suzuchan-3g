@@ -13,6 +13,7 @@
 #include <Python.h>
 
 #include "Suzuchan.h"
+#include "shimpy.h"
 
 void Suzuchan::process(GroupMessageEvent e)
 {
@@ -47,7 +48,7 @@ void Suzuchan::process(GroupMessageEvent e)
         evaluate(e);
 }
 
-std::string Suzuchan::VERSION = "1.6.1";
+std::string Suzuchan::VERSION = "1.6.2";
 std::string Suzuchan::COMPILE_TIME = __DATE__ ", " __TIME__;
 
 void Suzuchan::fortune(GroupMessageEvent e)
@@ -82,9 +83,7 @@ void Suzuchan::randsel(GroupMessageEvent e)
 
 bool pyenv_ok;
 static PyObject * sys, * path;
-static PyObject * mod_gojb_string, * mod_gojb, * mod_gojb_dict, * go;
-static PyObject * mod_rcat_string, * mod_rcat, * mod_rcat_dict, * rcat;
-static PyObject * mod_maib40_string, * mod_maib40, * mod_maib40_dict, * maib40_gen;
+static shimpy * shim_gojb, * shim_rcat, * shim_maib40;
 void Suzuchan::_initialize_pyenv()
 {
     if (pyenv_ok)
@@ -99,20 +98,9 @@ void Suzuchan::_initialize_pyenv()
     path = PyObject_GetAttrString(sys, "path");
     PyList_Append(path, PyUnicode_FromString("."));
 
-    mod_gojb_string = PyUnicode_FromString((char *)"gojb.gojb");
-    mod_gojb = PyImport_Import(mod_gojb_string);
-    mod_gojb_dict = PyModule_GetDict(mod_gojb);
-    go = PyDict_GetItemString(mod_gojb_dict, "go");
-
-    mod_rcat_string = PyUnicode_FromString((char *)"rcat");
-    mod_rcat = PyImport_Import(mod_rcat_string);
-    mod_rcat_dict = PyModule_GetDict(mod_rcat);
-    rcat = PyDict_GetItemString(mod_rcat_dict, "rcat");
-
-    mod_maib40_string = PyUnicode_FromString((char *)"maib40");
-    mod_maib40 = PyImport_Import(mod_maib40_string);
-    mod_maib40_dict = PyModule_GetDict(mod_maib40);
-    maib40_gen = PyDict_GetItemString(mod_maib40_dict, "maib40");
+    shim_gojb = new shimpy("gojb.gojb", "go");
+    shim_rcat = new shimpy("rcat", "rcat");
+    shim_maib40 = new shimpy("maib40", "maib40");
 
     pyenv_ok = true;
 }
@@ -121,15 +109,7 @@ void Suzuchan::randcat(GroupMessageEvent e)
 {
     _initialize_pyenv();
     auto msg = person_swap(e.message.toMiraiCode().substr(5), e);
-    PyObject * rcat_string = PyUnicode_FromString(msg.c_str());
-
-    PyObject * args = PyTuple_New(1);
-    PyTuple_SetItem(args, 0, rcat_string);
-    PyObject * result = PyObject_CallObject(rcat, args);
-    Py_ssize_t size;
-    const char * data = PyUnicode_AsUTF8AndSize(result, &size);
-    std::string response(data, size);
-
+    std::string response = shim_rcat->call(msg);
     e.group.sendMessage(MiraiCode(response + "！"));
 }
 
@@ -159,14 +139,7 @@ void Suzuchan::shuffle(GroupMessageEvent e, bool concatenate)
 void Suzuchan::go_jubeat(GroupMessageEvent e)
 {
     _initialize_pyenv();
-    PyObject * go_args = PyUnicode_FromString(e.message.toMiraiCode().c_str());
-    PyObject * args = PyTuple_New(1);
-    PyTuple_SetItem(args, 0, go_args);
-    PyObject * result = PyObject_CallObject(go, args);
-    Py_ssize_t size;
-    const char * data = PyUnicode_AsUTF8AndSize(result, &size);
-    std::string response(data, size);
-
+    std::string response = shim_gojb->call(e.message.toMiraiCode());
     e.group.sendMessage(response);
 }
 
@@ -375,13 +348,7 @@ void Suzuchan::yb50(GroupMessageEvent e) {
 void Suzuchan::maib40(GroupMessageEvent e)
 {
     _initialize_pyenv();
-    PyObject * mb40_args = PyUnicode_FromString(std::to_string(e.sender.id()).c_str());
-    PyObject * args = PyTuple_New(1);
-    PyTuple_SetItem(args, 0, mb40_args);
-    PyObject * result = PyObject_CallObject(maib40_gen, args);
-    Py_ssize_t size;
-    const char * data = PyUnicode_AsUTF8AndSize(result, &size);
-    std::string response(data, size);
+    std::string response = shim_maib40->call(std::to_string(e.sender.id()));
 
     if (boost::starts_with(response, "/tmp/")) {
         Image i = e.group.uploadImg(response);
