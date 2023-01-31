@@ -58,7 +58,6 @@ public:
     static void shuffle(GroupMessageEvent e, bool concatenate = false);
     static void go_jubeat(GroupMessageEvent e);
     static void diceroll(GroupMessageEvent e);
-    static void yb50(GroupMessageEvent e);
     static void maib40(GroupMessageEvent e);
 };
 

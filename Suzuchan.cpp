@@ -38,8 +38,6 @@ void Suzuchan::process(GroupMessageEvent e)
         smoke(e, "啵");
     else if (boost::starts_with(msg, "roll"))
         diceroll(e);
-    else if (boost::starts_with(msg, "yb50"))
-        yb50(e);
     else if (boost::starts_with(msg, "shfl "))
         shuffle(e);
     else if (boost::starts_with(msg, "scat "))
@@ -48,7 +46,7 @@ void Suzuchan::process(GroupMessageEvent e)
         evaluate(e);
 }
 
-std::string Suzuchan::VERSION = "1.6.2";
+std::string Suzuchan::VERSION = "1.6.2a";
 std::string Suzuchan::COMPILE_TIME = __DATE__ ", " __TIME__;
 
 void Suzuchan::fortune(GroupMessageEvent e)
@@ -337,12 +335,6 @@ void Suzuchan::evaluate(GroupMessageEvent e)
 {
     std::string expr_str = e.message.toMiraiCode().substr(5 /*kw_evaluate.size()*/);
     e.group.sendMessage(eval(expr_str) + "！");
-}
-
-void Suzuchan::yb50(GroupMessageEvent e) {
-    system("python3 ./maimai-profile-parser/app.py png");
-    Image i = e.group.uploadImg("miaomiaodx_ratings_ahiru233_0.png");
-    e.group.sendMessage(i);
 }
 
 void Suzuchan::maib40(GroupMessageEvent e)
