@@ -22,6 +22,8 @@ void Suzuchan::process(GroupMessageEvent e)
 
     if (boost::starts_with(msg, "mb40"))
         maib40(e);
+    else if (boost::starts_with(msg, "isearch"))
+        isearch(e);
     else if (boost::starts_with(msg, "rcat "))
         randcat(e);
     else if (boost::starts_with(msg, "rsel ") || boost::starts_with(msg, "resl "))
@@ -46,7 +48,7 @@ void Suzuchan::process(GroupMessageEvent e)
         evaluate(e);
 }
 
-std::string Suzuchan::VERSION = "1.6.2a";
+std::string Suzuchan::VERSION = "1.7.0-pre";
 std::string Suzuchan::COMPILE_TIME = __DATE__ ", " __TIME__;
 
 void Suzuchan::fortune(GroupMessageEvent e)
@@ -82,6 +84,7 @@ void Suzuchan::randsel(GroupMessageEvent e)
 bool pyenv_ok;
 static PyObject * sys, * path;
 static shimpy * shim_gojb, * shim_rcat, * shim_maib40;
+static shimpy * xiv_db, * xiv_universalis;
 void Suzuchan::_initialize_pyenv()
 {
     if (pyenv_ok)
@@ -99,6 +102,8 @@ void Suzuchan::_initialize_pyenv()
     shim_gojb = new shimpy("gojb.gojb", "go");
     shim_rcat = new shimpy("rcat", "rcat");
     shim_maib40 = new shimpy("maib40", "maib40");
+
+    xiv_db = new shimpy("ffxiv.xivdb_cn", "isearch");
 
     pyenv_ok = true;
 }
@@ -351,6 +356,18 @@ void Suzuchan::maib40(GroupMessageEvent e)
     }
     else if (response == "403") {
         e.group.sendMessage("你不许查了喵.jpg");
+    }
+}
+
+void Suzuchan::isearch(GroupMessageEvent e)
+{
+    _initialize_pyenv();
+    std::string response = xiv_db->call(e.message.toMiraiCode());
+
+    if (boost::starts_with(response, "/tmp/")) {
+        Image i = e.group.uploadImg(response);
+        e.group.sendMessage(i);
+        remove(response.c_str());
     }
 }
 

@@ -9,10 +9,15 @@ shimpy::shimpy(const std::string & path, const std::string & method_name)
 {
     this->module_string = PyUnicode_FromString(path.c_str());
     this->module_obj = PyImport_Import(module_string);
+    if (!module_obj) goto err;
     this->module_dict = PyModule_GetDict(module_obj);
+    if (!module_dict) goto err;
     this->method_obj = PyDict_GetItemString(module_dict, method_name.c_str());
-    if (!(module_string && module_obj && module_dict && method_obj))
-        throw std::bad_alloc();
+    if (! method_obj) goto err;
+    return;
+err:
+    PyErr_Print();
+    throw std::bad_alloc();
 }
 
 std::string shimpy::call(const std::string & args)
