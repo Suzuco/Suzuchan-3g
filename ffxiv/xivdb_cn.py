@@ -34,6 +34,25 @@ def api_item_search(kw: str):
     return content
 
 
+def api_item_info(item_id: int):
+    try:
+        item_info = requests.get("https://cafemaker.wakingsands.com/Item/{}"
+                                 .format(item_id))
+    except Exception:
+        return {"Error": "乌乌，网线被拔力。"}
+    if item_info.status_code >= 500:
+        return {"Error": "我趣，土豆熟了（HTTP {}）"
+                .format(item_info.status_code)}
+    elif item_info.status_code == 404:
+        return {"Error": "查无此物喵。"
+                .format(item_info.status_code)}
+    elif item_info.status_code != 200:
+        return {"Error": "API挂了捏。（HTTP {}）"
+                .format(item_info.status_code)}
+    item_info = json.loads(item_info.content)
+    return item_info
+
+
 def isearch(args: str) -> str:
     args = args.split()
     if len(args) == 1:
@@ -58,5 +77,5 @@ def isearch(args: str) -> str:
                     + " - " + content["Results"][i]["Name"]
     return render_simple(24, "sarasa-gothic-sc-regular.ttf",
                          [(msg_sys, "#eee1c5"),
-                         (msg_name, "#ffffff"), (msg_id, "#aaaaaa")])
+                          (msg_name, "#ffffff"), (msg_id, "#aaaaaa")])
 

@@ -24,6 +24,8 @@ void Suzuchan::process(GroupMessageEvent e)
         maib40(e);
     else if (boost::starts_with(msg, "isearch"))
         isearch(e);
+    else if (boost::starts_with(msg, "msearch"))
+        msearch(e);
     else if (boost::starts_with(msg, "rcat "))
         randcat(e);
     else if (boost::starts_with(msg, "rsel ") || boost::starts_with(msg, "resl "))
@@ -48,7 +50,7 @@ void Suzuchan::process(GroupMessageEvent e)
         evaluate(e);
 }
 
-std::string Suzuchan::VERSION = "1.7.0-pre";
+std::string Suzuchan::VERSION = "1.7.0";
 std::string Suzuchan::COMPILE_TIME = __DATE__ ", " __TIME__;
 
 void Suzuchan::fortune(GroupMessageEvent e)
@@ -104,6 +106,7 @@ void Suzuchan::_initialize_pyenv()
     shim_maib40 = new shimpy("maib40", "maib40");
 
     xiv_db = new shimpy("ffxiv.xivdb_cn", "isearch");
+    xiv_universalis = new shimpy("ffxiv.universalis", "msearch");
 
     pyenv_ok = true;
 }
@@ -368,6 +371,20 @@ void Suzuchan::isearch(GroupMessageEvent e)
         Image i = e.group.uploadImg(response);
         e.group.sendMessage(i);
         remove(response.c_str());
+    }
+}
+void Suzuchan::msearch(GroupMessageEvent e)
+{
+    _initialize_pyenv();
+    std::string response = xiv_universalis->call(e.message.toMiraiCode());
+
+    if (boost::starts_with(response, "/tmp/")) {
+        Image i = e.group.uploadImg(response);
+        e.group.sendMessage(i);
+        remove(response.c_str());
+    }
+    else {
+        e.group.sendMessage(response);
     }
 }
 

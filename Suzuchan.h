@@ -60,6 +60,7 @@ public:
     static void diceroll(GroupMessageEvent e);
     static void maib40(GroupMessageEvent e);
     static void isearch(GroupMessageEvent e);
+    static void msearch(GroupMessageEvent e);
 };
 
 
