@@ -21,7 +21,7 @@ def render_simple(font_size: int, ttf_path: str,
         return None
     font = ImageFont.truetype(ttf_path, font_size)
     margin = int(font_size * 1.618)
-    img_size = (512, 1024)
+    img_size = (1024, 2048)
 
     img = Image.new("RGB", img_size, bg_color)
     canvas = ImageDraw.Draw(img)
