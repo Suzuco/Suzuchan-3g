@@ -5,7 +5,7 @@ import requests
 import json
 from typing import Dict
 from datetime import datetime
-from .xivdb_cn import api_item_info
+from .xivdb_cn import api_item_search, api_item_info
 from .text_renderer import render_simple
 
 
@@ -32,20 +32,24 @@ def market_search(item_id: int, params: Dict) -> Dict:
 
 def msearch(args: str) -> str:
     args = args.split()
-    item_id = 0
     params = {"hq": "", "dc": "猫小胖"}
 
     if len(args) < 2:
-        return "用法：msearch 物品ID [hq] [数据中心]"
-    try:
-        item_id = int(args[1])
-    except ValueError:
-        return "需要物品的数字ID捏。可以先用isearch查询喵。"
+        return "用法：msearch 物品名|物品ID [hq] [数据中心]"
 
-    item_name = api_item_info(item_id)
-    if "Error" in item_name.keys():
-        return item_name["Error"]
-    item_name = item_name["Name_chs"]
+    item = api_item_search(args[1])
+    if item["Pagination"]["ResultsTotal"] == 1:
+        item_name = args[1]
+        item_id = item["Results"][0]["ID"]
+    else:
+        try:
+            item_id = int(args[1])
+        except ValueError:
+            return "需要物品的数字ID捏。可以先用isearch查询喵。"
+        item_name = api_item_info(item_id)
+        if "Error" in item_name.keys():
+            return item_name["Error"]
+        item_name = item_name["Name_chs"]
 
     for s in args:
         if "hq" == s.lower():
