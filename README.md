@@ -23,6 +23,7 @@ based on [Nambers/MiraiCP](https://github.com/Nambers/MiraiCP), with [ArashParto
 | mb40    | mb40                   | 拉取水鱼maimai查分器上绑定账号的成绩，然后列表               ||
 | isearch | isearch 武略魔晶石          | 搜索FF14（国服/简中）中的物品。                       |
 | msearch | msearch 13637 hq 猫     | 搜索FF14（国服/简中）市场出售及交易记录                   |
+| 运势      | 运势                     | 今日运势，附带一把~~米诺~~起手                        |
 | 抽卡      | 抽卡                     | 十连抽卡模拟器（SSR 1%，SR 10%，R 89%，有保底无天井）      ||
 | 抽烟      | 抽烟                     | 禁言十连抽，不保证中奖.jpg                          | ✔️  |
 | 递烟      | 递烟@易烟丁真                | 一种原始的群内PVP形式（禁言->禁烟->敬烟->递烟）             | ✔️  |
