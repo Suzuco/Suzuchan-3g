@@ -22,6 +22,8 @@ void Suzuchan::process(GroupMessageEvent e)
 
     if (boost::starts_with(msg, "mb40"))
         maib40(e);
+    else if (msg == "运势")
+        fortune(e);
     else if (boost::starts_with(msg, "isearch"))
         isearch(e);
     else if (boost::starts_with(msg, "msearch"))
@@ -50,13 +52,8 @@ void Suzuchan::process(GroupMessageEvent e)
         evaluate(e);
 }
 
-std::string Suzuchan::VERSION = "1.7.0";
+std::string Suzuchan::VERSION = "1.8.0";
 std::string Suzuchan::COMPILE_TIME = __DATE__ ", " __TIME__;
-
-void Suzuchan::fortune(GroupMessageEvent e)
-{
-
-}
 
 void Suzuchan::randsel(GroupMessageEvent e)
 {
@@ -85,7 +82,7 @@ void Suzuchan::randsel(GroupMessageEvent e)
 
 bool pyenv_ok;
 static PyObject * sys, * path;
-static shimpy * shim_gojb, * shim_rcat, * shim_maib40;
+static shimpy * shim_gojb, * shim_rcat, * shim_maib40, * shim_fortune;
 static shimpy * xiv_db, * xiv_universalis;
 void Suzuchan::_initialize_pyenv()
 {
@@ -104,11 +101,20 @@ void Suzuchan::_initialize_pyenv()
     shim_gojb = new shimpy("gojb.gojb", "go");
     shim_rcat = new shimpy("rcat", "rcat");
     shim_maib40 = new shimpy("maib40", "maib40");
+    shim_fortune = new shimpy("fortune", "fortune");
 
     xiv_db = new shimpy("ffxiv.xivdb_cn", "isearch");
     xiv_universalis = new shimpy("ffxiv.universalis", "msearch");
 
     pyenv_ok = true;
+}
+
+void Suzuchan::fortune(GroupMessageEvent e)
+{
+    _initialize_pyenv();
+    std::string response = make_at(e.sender.id());
+    response += shim_fortune->call(std::to_string(e.sender.id()));
+    e.group.sendMessage(MiraiCode(response));
 }
 
 void Suzuchan::randcat(GroupMessageEvent e)
