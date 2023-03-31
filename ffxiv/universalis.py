@@ -38,7 +38,8 @@ def msearch(args: str) -> str:
         return "用法：msearch 物品名|物品ID [hq] [数据中心]"
 
     item = api_item_search(args[1])
-    if item["Pagination"]["ResultsTotal"] == 1:
+    if item["Pagination"]["ResultsTotal"] >= 1\
+            and item["Results"][0]["Name"] == args[1]:
         item_name = args[1]
         item_id = item["Results"][0]["ID"]
     else:
