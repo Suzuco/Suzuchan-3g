@@ -1,9 +1,7 @@
-
 import math
 import random
 import hashlib
 from datetime import date
-
 
 tiles = list(range(ord('\U0001F000'), ord('\U0001F022')))
 tiles = tiles[7:] + tiles[0:4] + [tiles[6], tiles[5], tiles[4]]
@@ -15,7 +13,8 @@ def fortune(uid: str):
 
     rp = int(math.fabs(cookies[0] - cookies[1])) - 128
 
-    rgen = random.Random(cookies[2])
+    seed_mj = cookies[19] + cookies[18] * 256 + cookies[17] * 65536 + cookies[16] * 16777216
+    rgen = random.Random(seed_mj)
     hand = rgen.sample(range(136), 14)
     hand.sort()
     str_hand = "".join([chr(tiles[t // 4]) for t in hand])
