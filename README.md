@@ -3,9 +3,8 @@
 ![GitHub](https://img.shields.io/github/license/Suzuco/Suzuchan-3g)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Suzuco/Suzuchan-3g)
 
-![works on my computer](https://img.shields.io/badge/works%20on-my%20computer-blueviolet)
-![and my server](https://img.shields.io/badge/also%20works%20on-my%20cloud%20server-blue)
-![okay](https://img.shields.io/badge/which%20is-fucking%20great%21-brightgreen)
+>Notice: The underlying infrastructure was again, banned, hence the archival and migration to newer platform.
+>Nice job, Tencent. /s
 
 based on [Nambers/MiraiCP](https://github.com/Nambers/MiraiCP), with [ArashPartow/exprtk](https://github.com/ArashPartow/exprtk) [MIT]
 
